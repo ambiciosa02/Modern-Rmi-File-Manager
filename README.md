@@ -1,5 +1,5 @@
 [file name]: README.md
-[file content begin]
+
 # Modern File Management System
 
 A distributed file management system featuring a modern Glassmorphism web interface. This project uses **Java RMI** for the file system backend and **Spring Boot** for the web frontend.
