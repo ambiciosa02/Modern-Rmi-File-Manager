@@ -1,0 +1,6 @@
+/target/
+.idea/
+*.iml
+.vscode/
+server_storage/
+*.log

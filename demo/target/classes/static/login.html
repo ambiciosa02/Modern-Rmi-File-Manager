@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #475569;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            --radius: 12px;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .login-card {
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 36px;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .login-hint {
+            font-size: 14px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .login-hint code {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-top: 16px;
+            color: #fecaca;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .demo-credentials {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .demo-title {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .credential-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .credential-value {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card glass">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-cloud"></i>
+                    <span>File Manager</span>
+                </div>
+                <h2 class="login-subtitle">Sign in to access your files</h2>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">Email or Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        class="form-input" 
+                        placeholder="Enter your email or username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-input" 
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid credentials. Please try again.</span>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginButton">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+            </form>
+
+            <div class="demo-credentials">
+                <div class="demo-title">Demo Credentials:</div>
+                <div class="credential-item">
+                    <span class="credential-label">Username:</span>
+                    <span class="credential-value">user@gmail.com</span>
+                </div>
+                <div class="credential-item">
+                    <span class="credential-label">Password:</span>
+                    <span class="credential-value">123</span>
+                </div>
+            </div>
+
+            <div class="login-hint">
+                <p><strong>Note:</strong> After logging in, you can create additional user accounts from the Settings menu.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User storage in localStorage
+        const USERS_KEY = 'fileManagerUsers';
+        const DEFAULT_USER = {
+            id: 1,
+            username: 'user@gmail.com',
+            password: '123',
+            email: 'user@gmail.com',
+            name: 'Demo User',
+            role: 'admin',
+            created: new Date().toISOString(),
+            lastLogin: null
+        };
+
+        // Initialize users if not exists
+        function initializeUsers() {
+            const users = JSON.parse(localStorage.getItem(USERS_KEY));
+            if (!users || users.length === 0) {
+                localStorage.setItem(USERS_KEY, JSON.stringify([DEFAULT_USER]));
+            }
+        }
+
+        // Get all users
+        function getUsers() {
+            return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+        }
+
+        // Save users
+        function saveUsers(users) {
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        }
+
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        });
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const loginButton = document.getElementById('loginButton');
+            
+            // Reset error state
+            errorMessage.classList.remove('show');
+            
+            // Validate inputs
+            if (!username || !password) {
+                errorText.textContent = 'Please enter both username and password';
+                errorMessage.classList.add('show');
+                document.getElementById('loginForm').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('loginForm').classList.remove('shake');
+                }, 500);
+                return;
+            }
+            
+            // Show loading state
+            const originalText = loginButton.innerHTML;
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            loginButton.disabled = true;
+            
+            // Initialize users
+            initializeUsers();
+            
+            // Get users from storage
+            const users = getUsers();
+            
+            // Simulate API delay
+            setTimeout(() => {
+                // Find user
+                const user = users.find(u => 
+                    (u.username === username || u.email === username) && 
+                    u.password === password
+                );
+                
+                if (user) {
+                    // Update last login
+                    user.lastLogin = new Date().toISOString();
+                    saveUsers(users);
+                    
+                    // Store current user session
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    
+                    // Show success and redirect
+                    loginButton.innerHTML = '<i class="fas fa-check"></i> Login Successful!';
+                    loginButton.style.background = 'var(--success)';
+                    
+                    setTimeout(() => {
+                        // Redirect to main file manager
+                        window.location.href = 'index.html';
+                    }, 1000);
+                    
+                } else {
+                    // Invalid credentials
+                    errorText.textContent = 'Invalid username or password';
+                    errorMessage.classList.add('show');
+                    document.getElementById('loginForm').classList.add('shake');
+                    
+                    // Reset button
+                    loginButton.innerHTML = originalText;
+                    loginButton.disabled = false;
+                    
+                    setTimeout(() => {
+                        document.getElementById('loginForm').classList.remove('shake');
+                    }, 500);
+                }
+            }, 1000);
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUsers();
+            
+            // Check if already logged in
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                // Redirect to main page
+                window.location.href = 'index.html';
+            }
+            
+            // Auto-focus username field
+            document.getElementById('username').focus();
+        });
+
+        // Enter key to submit
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const activeElement = document.activeElement;
+                if (activeElement.tagName === 'INPUT' && activeElement.type !== 'button') {
+                    e.preventDefault();
+                    document.getElementById('loginForm').requestSubmit();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
